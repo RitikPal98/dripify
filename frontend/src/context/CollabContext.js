@@ -25,7 +25,7 @@ export function CollabProvider({ children }) {
     fetchCollabs();
   }, []);
 
-  const addCollab = async (newCollab) => {
+  const addCollab = (newCollab) => {
     setCollabs((prevCollabs) => [newCollab, ...prevCollabs]);
   };
 
