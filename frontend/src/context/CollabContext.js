@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
+import config from "../config/config.js";
 
 const CollabContext = createContext();
 
@@ -7,14 +8,9 @@ export function CollabProvider({ children }) {
   const [collabs, setCollabs] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // Fetch collabs from MongoDB
-  useEffect(() => {
-    fetchCollabs();
-  }, []);
-
   const fetchCollabs = async () => {
     try {
-      const response = await axios.get("http://localhost:5000/api/collabs");
+      const response = await axios.get(`${config.API_URL}/api/collabs`);
       if (response.data.success) {
         setCollabs(response.data.data);
       }
@@ -25,13 +21,17 @@ export function CollabProvider({ children }) {
     }
   };
 
+  useEffect(() => {
+    fetchCollabs();
+  }, []);
+
   const addCollab = async (newCollab) => {
     setCollabs((prevCollabs) => [newCollab, ...prevCollabs]);
   };
 
   const deleteCollab = async (collabId) => {
     try {
-      await axios.delete(`http://localhost:5000/api/collabs/${collabId}`);
+      await axios.delete(`${config.API_URL}/api/collabs/${collabId}`);
       setCollabs((prevCollabs) =>
         prevCollabs.filter((collab) => collab._id !== collabId)
       );

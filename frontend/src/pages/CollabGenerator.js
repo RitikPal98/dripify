@@ -6,18 +6,16 @@ import {
   Container,
   Heading,
   Text,
-  Image,
-  Box,
   useToast,
 } from "@chakra-ui/react";
 import { useCollabs } from "../context/CollabContext";
 import axios from "axios";
+import config from "../config/config.js";
 
 function CollabGenerator() {
   const [brand1, setBrand1] = useState("");
   const [brand2, setBrand2] = useState("");
   const [loading, setLoading] = useState(false);
-  const [currentCollab, setCurrentCollab] = useState(null);
   const { addCollab } = useCollabs();
   const toast = useToast();
 
@@ -35,7 +33,7 @@ function CollabGenerator() {
     setLoading(true);
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/generate-collab",
+        `${config.API_URL}/api/generate-collab`,
         {
           brand1: brand1.trim(),
           brand2: brand2.trim(),
@@ -44,7 +42,6 @@ function CollabGenerator() {
 
       if (response.data.success) {
         const newCollab = response.data.data;
-        setCurrentCollab(newCollab);
         addCollab(newCollab);
         toast({
           title: "Success!",
@@ -52,6 +49,8 @@ function CollabGenerator() {
           status: "success",
           duration: 3000,
         });
+        setBrand1("");
+        setBrand2("");
       }
     } catch (error) {
       console.error("Error:", error);
@@ -96,29 +95,6 @@ function CollabGenerator() {
             Generate Drip
           </Button>
         </VStack>
-
-        {currentCollab && (
-          <Box
-            w="100%"
-            borderRadius="lg"
-            overflow="hidden"
-            boxShadow="xl"
-            bg="white"
-          >
-            <Image
-              src={currentCollab.imageUrl}
-              alt={`${currentCollab.brand1} x ${currentCollab.brand2}`}
-              w="100%"
-              h="auto"
-            />
-            <Box p={6}>
-              <Text fontSize="xl" fontWeight="bold" mb={2}>
-                {currentCollab.brand1} x {currentCollab.brand2}
-              </Text>
-              <Text color="gray.600">{currentCollab.description}</Text>
-            </Box>
-          </Box>
-        )}
       </VStack>
     </Container>
   );
