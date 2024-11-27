@@ -15,12 +15,20 @@ function Header() {
           <Heading size="lg">Dripify</Heading>
         </RouterLink>
         <Flex gap={6}>
-          <ChakraLink as={RouterLink} to="/" _hover={{ color: "purple.200" }}>
+          <ChakraLink
+            as={RouterLink}
+            to="/"
+            fontSize="1.2rem"
+            fontWeight="bold"
+            _hover={{ color: "purple.200" }}
+          >
             Generate
           </ChakraLink>
           <ChakraLink
             as={RouterLink}
             to="/gallery"
+            fontSize="1.2rem"
+            fontWeight="bold"
             _hover={{ color: "purple.200" }}
           >
             Gallery

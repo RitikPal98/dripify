@@ -55,7 +55,9 @@ function Gallery() {
   return (
     <>
       <Container maxW="container.xl" py={8}>
-        <Heading mb={2}>Drip Gallery</Heading>
+        <Heading color="rgb(112, 41, 99)" mb={2}>
+          Drip Gallery
+        </Heading>
         <Text color="gray.600" mb={8}>
           Check out these fire collabs 🔥
         </Text>
@@ -112,10 +114,11 @@ function Gallery() {
                 </VStack>
               </ModalBody>
               <ModalFooter>
-                <Button colorScheme="blue" mr={3} onClick={onClose}>
+                <Button colorScheme="purple" mr={3} onClick={onClose}>
                   Close
                 </Button>
                 <Button
+                  display="none"
                   colorScheme="red"
                   variant="ghost"
                   onClick={() => handleDelete(selectedCollab._id)}

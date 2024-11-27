@@ -78,7 +78,7 @@ function CollabGenerator() {
     <Container maxW="container.md" py={8}>
       <VStack spacing={8} align="stretch">
         <VStack spacing={3}>
-          <Heading>Generate Your Dream Collab</Heading>
+          <Heading color="rgb(112, 41, 99)">Generate Your Dream Collab</Heading>
           <Text color="gray.600" textAlign="center">
             Mix any two brands for some AI-powered drip
           </Text>

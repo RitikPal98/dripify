@@ -38,9 +38,9 @@ function CollabCard({ collab, handleView, handleDelete }) {
           </Badge>
           <HStack spacing={2}>
             <IconButton
-              icon={<ViewIcon />}
-              size="sm"
-              colorScheme="blue"
+              icon={<ViewIcon fontSize="1.5rem" />}
+              size="lg"
+              colorScheme="purple"
               variant="ghost"
               onClick={() => handleView(collab)}
               aria-label="View collab"
@@ -52,10 +52,11 @@ function CollabCard({ collab, handleView, handleDelete }) {
               variant="ghost"
               onClick={() => handleDelete(collab._id)}
               aria-label="Delete collab"
+              display="none"
             />
           </HStack>
         </HStack>
-        <Text fontSize="sm" color="gray.600" noOfLines={2}>
+        <Text fontSize="md" color="gray.600" noOfLines={2}>
           {collab.description}
         </Text>
         <Text fontSize="xs" color="gray.400">
