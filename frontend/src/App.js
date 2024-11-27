@@ -12,8 +12,9 @@ const theme = extendTheme({
   styles: {
     global: {
       body: {
-        bg: "white",
+        bg: "rgba(255, 255, 255, 0.85)",
         color: "gray.800",
+        bgImage: "https://www.transparenttextures.com/patterns/skulls.png",
       },
     },
   },
@@ -38,13 +39,22 @@ function App() {
     <ChakraProvider theme={theme}>
       <CollabProvider>
         <Router>
-          <div className="App">
+          <div
+            className="App"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              minHeight: "100vh",
+            }}
+          >
             <Toaster position="top-center" />
             <Header />
-            <Routes>
-              <Route path="/" element={<CollabGenerator />} />
-              <Route path="/gallery" element={<Gallery />} />
-            </Routes>
+            <div style={{ flex: 1 }}>
+              <Routes>
+                <Route path="/" element={<CollabGenerator />} />
+                <Route path="/gallery" element={<Gallery />} />
+              </Routes>
+            </div>
             <Footer />
           </div>
         </Router>

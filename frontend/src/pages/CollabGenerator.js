@@ -118,6 +118,14 @@ function CollabGenerator() {
           </VStack>
         </Box>
 
+        {loading && (
+          <Box textAlign="center" py={4}>
+            <Text fontSize="lg" color="purple.600" fontWeight="medium">
+              Please wait, your drip is getting ready! 🔥
+            </Text>
+          </Box>
+        )}
+
         {generatedCollab && (
           <Box
             mt={8}
