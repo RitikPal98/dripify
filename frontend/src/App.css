@@ -2,3 +2,23 @@ body{
   background-image: url("https://www.transparenttextures.com/patterns/skulls.png");
   z-index: 1000;
 }
+
+@keyframes pop {
+  0% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes wave {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(15deg);
+  }
+}

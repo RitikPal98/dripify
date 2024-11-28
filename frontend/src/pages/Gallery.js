@@ -18,15 +18,18 @@ import {
   Badge,
   useDisclosure,
   Box,
+  Fade,
 } from "@chakra-ui/react";
 import { useCollabs } from "../context/CollabContext";
 import CollabCard from "../components/CollabCard";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function Gallery() {
   const { collabs, loading, deleteCollab } = useCollabs();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedCollab, setSelectedCollab] = useState(null);
+  const [visibleCollabs, setVisibleCollabs] = useState(9); // Track visible collabs
+  const [loadingMore, setLoadingMore] = useState(false); // Track loading state for new collabs
 
   // Define the view handler
   const handleView = (collab) => {
@@ -43,6 +46,25 @@ function Gallery() {
       }
     }
   };
+
+  // Load more collabs on scroll
+  const handleScroll = () => {
+    if (
+      window.innerHeight + document.documentElement.scrollTop + 1 >=
+      document.documentElement.offsetHeight
+    ) {
+      setLoadingMore(true); // Set loading state to true
+      setVisibleCollabs((prev) => prev + 9); // Load 9 more collabs
+      setTimeout(() => setLoadingMore(false), 300); // Reset loading state after animation duration
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   if (loading) {
     return (
@@ -68,13 +90,18 @@ function Gallery() {
           </Text>
         ) : (
           <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
-            {collabs.map((collab) => (
-              <CollabCard
+            {collabs.slice(0, visibleCollabs).map((collab, index) => (
+              <Fade
                 key={collab._id}
-                collab={collab}
-                handleView={handleView}
-                handleDelete={handleDelete}
-              />
+                in={loadingMore || index < visibleCollabs}
+                transition={{ enter: { duration: 0.5 } }}
+              >
+                <CollabCard
+                  collab={collab}
+                  handleView={handleView}
+                  handleDelete={handleDelete}
+                />
+              </Fade>
             ))}
           </SimpleGrid>
         )}
