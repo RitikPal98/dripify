@@ -7,7 +7,7 @@ import {
   HStack,
   IconButton,
 } from "@chakra-ui/react";
-import { DeleteIcon, ViewIcon } from "@chakra-ui/icons";
+import { DeleteIcon, ViewIcon, DownloadIcon } from "@chakra-ui/icons";
 
 function CollabCard({ collab, handleView, handleDelete }) {
   return (
@@ -38,10 +38,10 @@ function CollabCard({ collab, handleView, handleDelete }) {
           </Badge>
           <HStack spacing={2}>
             <IconButton
-              icon={<ViewIcon fontSize="1.5rem" />}
-              size="lg"
-              colorScheme="purple"
-              variant="ghost"
+              icon={<ViewIcon fontSize={"1.4rem"} />}
+              size="md"
+              colorScheme="purlple"
+              variant="outline"
               onClick={() => handleView(collab)}
               aria-label="View collab"
             />
@@ -49,10 +49,20 @@ function CollabCard({ collab, handleView, handleDelete }) {
               icon={<DeleteIcon />}
               size="sm"
               colorScheme="red"
-              variant="ghost"
+              variant="outline"
               onClick={() => handleDelete(collab._id)}
               aria-label="Delete collab"
               display="none"
+            />
+            <IconButton
+              icon={<DownloadIcon />}
+              as="a"
+              href={collab.imageUrl}
+              download
+              size="md"
+              colorScheme="purple"
+              variant="outline"
+              aria-label="Download image"
             />
           </HStack>
         </HStack>
