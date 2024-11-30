@@ -39,19 +39,23 @@ app.post("/api/generate-collab", async (req, res) => {
     console.log("Generating collab for:", { brand1, brand2 });
 
     // Generate description
-    const descriptionPrompt = `Write a funny joke on collaboration between ${brand1} and ${brand2}. Make it super brief and funny.`;
+    // const descriptionPrompt = `Write a joke on collaboration of ${brand1} and ${brand2}. The joke you are writing make it supper funny and creative.`;
+    const descriptionPrompt = `Write a short, witty, and funny joke about a collaboration between ${brand1} and ${brand2}. Make it absurd and meme-worthy.`;
+
     const description = await hf.textGeneration({
       model: "gpt2",
       inputs: descriptionPrompt,
       parameters: {
         max_length: 100,
-        temperature: 0.9,
+        temperature: 0.7,
         return_full_text: false,
       },
     });
 
     // Generate image
-    const imagePrompt = `A professional fashion advertisement showcasing a collaboration between ${brand1} and ${brand2}. It should be meme material,funny and innovative. High-end commercial photography with fun.`;
+    // const imagePrompt = `A professional fashion advertisement showcasing a collaboration between ${brand1} and ${brand2}. It should be meme material,funny and innovative. High-end commercial photography with fun.`;
+    const imagePrompt = `A sunny, vibrant, and funny professional fashion advertisement showcasing a collaboration between ${brand1} and ${brand2}. Meme material, high-end commercial photography, cheerful, and colorful.`;
+
     const imageBlob = await hf.textToImage({
       model: "stabilityai/stable-diffusion-xl-base-1.0",
       inputs: imagePrompt,
