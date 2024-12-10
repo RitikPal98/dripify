@@ -133,6 +133,18 @@ function Gallery() {
             <Spinner size="lg" color="purple.500" />
           </Center>
         )}
+        <h1
+          onClick={(e) => fetchCollabs()}
+          style={{
+            textAlign: "center",
+            margin: "50px",
+            color: "purple",
+            cursor: "pointer",
+            fontSize: "1.5rem",
+          }}
+        >
+          Click To See More...
+        </h1>
       </Container>
 
       <Modal isOpen={isOpen} onClose={onClose} size="xl">
