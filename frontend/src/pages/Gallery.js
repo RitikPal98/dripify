@@ -39,7 +39,7 @@ function Gallery() {
   const fetchCollabs = async (page) => {
     try {
       const response = await axios.get(`${config.API_URL}/api/collabs`, {
-        params: { page, limit: 3 },
+        params: { page, limit: 6 },
       });
       if (response.data.success) {
         setCollabs((prev) => [...prev, ...response.data.data]);

@@ -23,7 +23,7 @@ app.use(express.json());
 
 // Get all collabs with pagination
 app.get("/api/collabs", async (req, res) => {
-  const { page = 1, limit = 3 } = req.query;
+  const { page = 1, limit = 6 } = req.query;
   try {
     const collabs = await Collab.find()
       .sort({ createdAt: -1 })
