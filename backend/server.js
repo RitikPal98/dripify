@@ -21,11 +21,16 @@ const hf = new HfInference(process.env.HUGGING_FACE_TOKEN);
 app.use(cors());
 app.use(express.json());
 
-// Get all collabs
+// Get all collabs with pagination
 app.get("/api/collabs", async (req, res) => {
+  const { page = 1, limit = 3 } = req.query;
   try {
-    const collabs = await Collab.find().sort({ createdAt: -1 });
-    res.json({ success: true, data: collabs });
+    const collabs = await Collab.find()
+      .sort({ createdAt: -1 })
+      .skip((page - 1) * limit)
+      .limit(Number(limit));
+    const total = await Collab.countDocuments();
+    res.json({ success: true, data: collabs, total });
   } catch (error) {
     console.error("Error fetching collabs:", error);
     res.status(500).json({ success: false, error: "Failed to fetch collabs" });

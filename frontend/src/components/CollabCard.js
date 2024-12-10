@@ -8,8 +8,9 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { DeleteIcon, ViewIcon, DownloadIcon } from "@chakra-ui/icons";
+import React from "react";
 
-function CollabCard({ collab, handleView, handleDelete }) {
+const CollabCard = React.memo(({ collab, handleView, handleDelete }) => {
   return (
     <Box
       borderWidth="1px"
@@ -30,6 +31,7 @@ function CollabCard({ collab, handleView, handleDelete }) {
         width="100%"
         height="200px"
         objectFit="cover"
+        loading="lazy"
       />
       <VStack p={4} align="start" spacing={2}>
         <HStack justify="space-between" width="100%">
@@ -40,7 +42,7 @@ function CollabCard({ collab, handleView, handleDelete }) {
             <IconButton
               icon={<ViewIcon fontSize={"1.4rem"} />}
               size="md"
-              colorScheme="purlple"
+              colorScheme="purple"
               variant="outline"
               onClick={() => handleView(collab)}
               aria-label="View collab"
@@ -75,6 +77,6 @@ function CollabCard({ collab, handleView, handleDelete }) {
       </VStack>
     </Box>
   );
-}
+});
 
 export default CollabCard;

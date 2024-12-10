@@ -22,51 +22,75 @@ import {
 } from "@chakra-ui/react";
 import { useCollabs } from "../context/CollabContext";
 import CollabCard from "../components/CollabCard";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import axios from "axios";
+import config from "../config/config.js";
 
 function Gallery() {
-  const { collabs, loading, deleteCollab } = useCollabs();
+  const { deleteCollab } = useCollabs();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedCollab, setSelectedCollab] = useState(null);
-  const [visibleCollabs, setVisibleCollabs] = useState(9); // Track visible collabs
-  const [loadingMore, setLoadingMore] = useState(false); // Track loading state for new collabs
+  const [collabs, setCollabs] = useState([]);
+  const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [total, setTotal] = useState(0);
 
-  // Define the view handler
+  const fetchCollabs = async (page) => {
+    try {
+      const response = await axios.get(`${config.API_URL}/api/collabs`, {
+        params: { page, limit: 3 },
+      });
+      if (response.data.success) {
+        setCollabs((prev) => [...prev, ...response.data.data]);
+        setTotal(response.data.total);
+      }
+    } catch (error) {
+      console.error("Error fetching collabs:", error);
+    } finally {
+      setLoading(false);
+      setLoadingMore(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCollabs(page);
+  }, [page]);
+
   const handleView = (collab) => {
     setSelectedCollab(collab);
     onOpen();
   };
 
-  // Define the delete handler
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this collab?")) {
       await deleteCollab(id);
+      setCollabs((prev) => prev.filter((collab) => collab._id !== id));
       if (selectedCollab && selectedCollab._id === id) {
         onClose();
       }
     }
   };
 
-  // Load more collabs on scroll
-  const handleScroll = () => {
+  const handleScroll = useCallback(() => {
     if (
       window.innerHeight + document.documentElement.scrollTop + 1 >=
-      document.documentElement.offsetHeight
+        document.documentElement.offsetHeight &&
+      collabs.length < total
     ) {
-      setLoadingMore(true); // Set loading state to true
-      setVisibleCollabs((prev) => prev + 9); // Load 9 more collabs
-      setTimeout(() => setLoadingMore(false), 300); // Reset loading state after animation duration
+      setLoadingMore(true);
+      setPage((prev) => prev + 1);
     }
-  };
+  }, [collabs.length, total]);
 
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, []);
+  }, [handleScroll]);
 
-  if (loading) {
+  if (loading && page === 1) {
     return (
       <Center h="50vh">
         <Spinner size="xl" color="purple.500" />
@@ -83,17 +107,16 @@ function Gallery() {
         <Text color="gray.600" mb={8}>
           Check out these fire collabs 🔥
         </Text>
-
         {collabs.length === 0 ? (
           <Text color="gray.500" textAlign="center">
             No collabs generated yet. Head to the generator to create some drip!
           </Text>
         ) : (
           <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
-            {collabs.slice(0, visibleCollabs).map((collab, index) => (
+            {collabs.map((collab, index) => (
               <Fade
                 key={collab._id}
-                in={loadingMore || index < visibleCollabs}
+                in={loadingMore || index < collabs.length}
                 transition={{ enter: { duration: 0.5 } }}
               >
                 <CollabCard
@@ -105,9 +128,13 @@ function Gallery() {
             ))}
           </SimpleGrid>
         )}
+        {loadingMore && (
+          <Center mt={4}>
+            <Spinner size="lg" color="purple.500" />
+          </Center>
+        )}
       </Container>
 
-      {/* View Modal */}
       <Modal isOpen={isOpen} onClose={onClose} size="xl">
         <ModalOverlay />
         <ModalContent>
@@ -127,6 +154,7 @@ function Gallery() {
                     borderRadius="md"
                     width="100%"
                     height="auto"
+                    loading="lazy"
                   />
                   <Box>
                     <Text fontSize="lg" fontWeight="bold" mb={2}>
